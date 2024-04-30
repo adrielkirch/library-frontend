@@ -21,4 +21,29 @@ const orderPagination = async (page, limit) => {
   }
 };
 
-export default orderPagination;
+const orderSearch = async (page, limit, value) => {
+  try {
+    const endpoint = "/order/search";
+    const queries = [
+      {
+        property: "page",
+        value: page,
+      },
+      {
+        property: "limit",
+        value: limit,
+      },
+      {
+        property: "value",
+          value: encodeURIComponent(value)
+      },
+    ];
+    const data = await get(endpoint, queries);
+    return data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export { orderPagination, orderSearch };

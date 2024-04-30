@@ -1,4 +1,4 @@
-import get  from "../get";
+import get from "../get";
 
 const customerPagination = async (page, limit) => {
   try {
@@ -21,4 +21,28 @@ const customerPagination = async (page, limit) => {
   }
 };
 
-export default customerPagination;
+const customerSearch = async (page, limit, value) => {
+  try {
+    const endpoint = "/customer/search";
+    const queries = [
+      {
+        property: "page",
+        value: page,
+      },
+      {
+        property: "limit",
+        value: limit,
+      },
+      {
+        property: "value",
+          value: encodeURIComponent(value)
+      },
+    ];
+    const data = await get(endpoint, queries);
+    return data;
+  } catch (err) {
+   console.log(err);
+  }
+};
+
+export { customerPagination, customerSearch };

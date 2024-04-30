@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
-import customerPagination from "../../services/requests/customer/customerRequests";
-import orderPagination from "../../services/requests/order/ordersRequests";
+import {
+  customerPagination,
+  customerSearch,
+} from "../../services/requests/customer/customerRequests";
+import {
+  orderPagination,
+  orderSearch,
+} from "../../services/requests/order/ordersRequests";
 
 const customerHeaders = [
   { label: "#", key: "customer_id" },
@@ -11,17 +17,15 @@ const customerHeaders = [
 
 const orderHeaders = [
   { label: "#", key: "order_id" },
-  { label: "Date", key: "order_date" },
-  { label: "Customer", key: "customer_name" }, 
+  { label: "Customer", key: "customer_name" },
   { label: "E-mail", key: "email" },
   { label: "Address", key: "address" },
-  { label: "Book", key: "book_title" }, 
+  { label: "Book", key: "book_title" },
   { label: "Price", key: "price" },
   { label: "Quantity Available", key: "quantity_available" },
   { label: "Author", key: "author_name" },
   { label: "Quantity Ordered", key: "quantity" },
 ];
-
 
 const selectTables = ["Customers", "Orders"];
 
@@ -33,7 +37,7 @@ export function useHomeViewModel() {
   const [limit, setLimit] = useState(selectPageSizes[3]);
   const [page, setPage] = useState(1);
   const [lastPage, setlastPage] = useState(2);
-
+  const [search, setSearch] = useState("Orders");
   const [currentData, setCurrentData] = useState([]);
 
   useEffect(() => {
@@ -58,6 +62,28 @@ export function useHomeViewModel() {
     fetchData();
   }, [selectedTable, limit, page]);
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        if (selectedTable === "Customers") {
+          setCurrentHeader([...customerHeaders]);
+          const result = await customerSearch(page, limit, search);
+          setCurrentData(result.data);
+          setlastPage(result.totalPages);
+        } else if (selectedTable === "Orders") {
+          setCurrentHeader([...orderHeaders]);
+          const result = await orderSearch(page, limit, search);
+          setCurrentData(result.data);
+          setlastPage(result.totalPages);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData();
+  }, [search]);
+
   const handleDropdownChange = (value) => {
     setSelectedTable(value);
   };
@@ -70,6 +96,11 @@ export function useHomeViewModel() {
   const handlePageChange = (value) => {
     setPage(value);
   };
+
+  const handleSearchChange = (event) => {
+    console.log(event.target.value)
+    setSearch(event.target.value);
+  }
 
   return {
     customerHeaders,
@@ -84,6 +115,7 @@ export function useHomeViewModel() {
     setPage,
     handleDropdownChange,
     handlePageSizeChange,
-    handlePageChange
+    handlePageChange,
+    handleSearchChange
   };
 }
