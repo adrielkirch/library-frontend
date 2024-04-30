@@ -1,6 +1,6 @@
 # Pub Library
 
-Short description of your project.
+Front-end React.js Repository for a simple library web system. Using Model View architecture
 
 ## Getting Started
 
