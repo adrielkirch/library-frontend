@@ -27,6 +27,8 @@ const orderHeaders = [
   { label: "Quantity Ordered", key: "quantity" },
 ];
 
+let firstSeach = true;
+
 const selectTables = ["Customers", "Orders"];
 
 const selectPageSizes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -36,10 +38,10 @@ export function useHomeViewModel() {
   const [selectedTable, setSelectedTable] = useState("Customers");
   const [limit, setLimit] = useState(selectPageSizes[3]);
   const [page, setPage] = useState(1);
-  const [lastPage, setlastPage] = useState(2);
-  const [search, setSearch] = useState("Orders");
+  const [lastPage, setlastPage] = useState(1);
+  const [search, setSearch] = useState("");
   const [currentData, setCurrentData] = useState([]);
-
+ 
   useEffect(() => {
     async function fetchData() {
       try {
@@ -63,16 +65,19 @@ export function useHomeViewModel() {
   }, [selectedTable, limit, page]);
 
   useEffect(() => {
+   
     async function fetchData() {
       try {
         if (selectedTable === "Customers") {
           setCurrentHeader([...customerHeaders]);
           const result = await customerSearch(page, limit, search);
+          console.log(result);
           setCurrentData(result.data);
           setlastPage(result.totalPages);
         } else if (selectedTable === "Orders") {
           setCurrentHeader([...orderHeaders]);
           const result = await orderSearch(page, limit, search);
+          console.log(result);
           setCurrentData(result.data);
           setlastPage(result.totalPages);
         }
@@ -98,9 +103,9 @@ export function useHomeViewModel() {
   };
 
   const handleSearchChange = (event) => {
-    console.log(event.target.value)
+    console.log(event.target.value);
     setSearch(event.target.value);
-  }
+  };
 
   return {
     customerHeaders,
@@ -116,6 +121,6 @@ export function useHomeViewModel() {
     handleDropdownChange,
     handlePageSizeChange,
     handlePageChange,
-    handleSearchChange
+    handleSearchChange,
   };
 }

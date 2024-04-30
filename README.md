@@ -27,3 +27,8 @@ A step-by-step series of examples that tell you how to get a development env run
 3. Build
 
    ``` npm run build ```
+
+4. You may serve it with a static server
+
+   ``` npm install -g serve ```
+   ``` serve -s build ```
