@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import customerPagination from "../../services/requests/customer/customerRequests";
+import orderPagination from "../../services/requests/order/ordersRequests";
 
 const customerHeaders = [
   { label: "#", key: "customer_id" },
@@ -19,55 +21,60 @@ const selectPageSizes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 export function useHomeViewModel() {
   const [currentHeader, setCurrentHeader] = useState([...customerHeaders]);
   const [selectedTable, setSelectedTable] = useState("Customers");
-  const [currentPageSize, setCurrentPageSize] = useState(selectPageSizes[0]);
-  const [startEndPage, setStartEndPage] = useState([1,5]);
+  const [limit, setLimit] = useState(selectPageSizes[3]);
+  const [page, setPage] = useState(1);
+  const [lastPage, setlastPage] = useState(2);
 
-  const [customers, setCustomers] = useState([
-    {
-      customer_id: "065b20eb-22d7-4302-8f09-dc66e455c29a",
-      name: "Customer 1",
-      email: "customer1@example.com",
-      address: "123 Main St",
-    },
-  ]);
+  const [currentData, setCurrentData] = useState([]);
 
-  const [orders, setOrders] = useState([
-    {
-      order_id: "c5c937e6-8e05-4954-bb60-de3b1d36de00",
-      customer_id: "065b20eb-22d7-4302-8f09-dc66e455c29a",
-      order_date: "2024-04-29",
-    },
-  ]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        if (selectedTable === "Customers") {
+          setCurrentHeader([...customerHeaders]);
+          const result = await customerPagination(page, limit);
+          setCurrentData(result.data);
+          setlastPage(result.totalPages);
+        } else if (selectedTable === "Orders") {
+          setCurrentHeader([...orderHeaders]);
+          const result = await orderPagination(page, limit);
+          setCurrentData(result.data);
+          setlastPage(result.totalPages);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
 
-  const [currentData, setCurrentData] = useState([...customers]);
+    fetchData();
+  }, [selectedTable, limit, page]);
 
   const handleDropdownChange = (value) => {
     setSelectedTable(value);
-    if (value === "Customers") {
-      setCurrentData([...customers]);
-      setCurrentHeader([...customerHeaders]);
-    } else if (value === "Orders") {
-      setCurrentData([...orders]);
-      setCurrentHeader([...orderHeaders]);
-    }
   };
 
   const handlePageSizeChange = (value) => {
-    setCurrentPageSize(value);
+    setLimit(value);
+    setPage(1);
+  };
+
+  const handlePageChange = (value) => {
+    setPage(value);
   };
 
   return {
-    customers,
-    orders,
     customerHeaders,
     orderHeaders,
     selectTables,
     selectPageSizes,
     currentData,
     currentHeader,
-    currentPageSize,
-    startEndPage,
+    limit,
+    lastPage,
+    page,
+    setPage,
     handleDropdownChange,
     handlePageSizeChange,
+    handlePageChange
   };
 }

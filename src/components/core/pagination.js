@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import Pagination from "react-bootstrap/Pagination";
 
-const DefaultPagination = ({startPage,endPage}) => {
-  const [active, setActive] = useState(1); 
+const DefaultPagination = ({ page, startPage, lastPage, onChange }) => {
+  const [active, setActive] = useState(page);
 
-  const handlePageChange = (number) => {
-    setActive(number); // Update active page state when a page is clicked
-  };
   let items = [];
-  for (let number = startPage; number <= endPage; number++) {
+  for (let number = startPage; number <= lastPage; number++) {
     items.push(
-      <Pagination.Item onClick={() => handlePageChange(number)} key={number} active={number === active}>
+      <Pagination.Item
+        onClick={() => {
+          onChange(number);
+          setActive(number);
+        }}
+        key={`changePage${number}`}
+        active={number === active}
+      >
         {number}
       </Pagination.Item>
     );
@@ -18,8 +22,7 @@ const DefaultPagination = ({startPage,endPage}) => {
 
   const paginationBasic = (
     <div>
-      <Pagination  className="custom-pagination mt-6">{items}</Pagination>{" "}
-      {/* Apply custom CSS class */}
+      <Pagination className="custom-pagination mt-6">{items}</Pagination>{" "}
     </div>
   );
 

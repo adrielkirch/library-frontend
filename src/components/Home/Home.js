@@ -5,22 +5,22 @@ import DefaultPagination from "../core/pagination";
 import DataTable from "../core/table";
 import { useHomeViewModel } from "./HomeViewModel";
 
-
 function Home() {
   const {
     selectTables,
     selectPageSizes,
     currentHeader,
     currentData,
-    currentPageSize,
-    startEndPage,
+    limit,
+    page,
+    lastPage,
     handleDropdownChange,
     handlePageSizeChange,
+    handlePageChange,
   } = useHomeViewModel();
 
   return (
     <section className="vh-100 d-flex flex-column align-items-center justify-content-center">
-
       <Container id="home">
         <div className="d-flex justify-content-start mb-4">
           <DefaultDropdown
@@ -32,21 +32,19 @@ function Home() {
         <DataTable data={currentData} headers={currentHeader}></DataTable>
         <div className="d-flex justify-content-between align-items-center">
           <DefaultPagination
-            onChange={handlePageSizeChange}
-            startPage={startEndPage[0]}
-            endPage={startEndPage[1]}
+            onChange={handlePageChange}
+            startPage={1}
+            lastPage={lastPage}
+            page={page}
           ></DefaultPagination>
           <DefaultDropdown
             options={selectPageSizes}
             onChange={handlePageSizeChange}
-            defaultOption={currentPageSize}
+            defaultOption={limit}
             label={"Items per page"}
           ></DefaultDropdown>
         </div>
-
       </Container>
-    
-      
     </section>
   );
 }
