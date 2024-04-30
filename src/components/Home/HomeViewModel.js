@@ -13,7 +13,17 @@ const orderHeaders = [
   { label: "#", key: "order_id" },
   { label: "Customer Id", key: "customer_id" },
   { label: "Date", key: "order_date" },
+  { label: "Name", key: "customer_name" }, 
+  { label: "E-mail", key: "email" },
+  { label: "Address", key: "address" },
+  { label: "Book", key: "book_title" }, 
+ 
+  { label: "Price", key: "price" },
+  { label: "Quantity Available", key: "quantity_available" },
+  { label: "Author", key: "author_name" },
+  { label: "Quantity Ordered", key: "quantity" },
 ];
+
 const selectTables = ["Customers", "Orders"];
 
 const selectPageSizes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
