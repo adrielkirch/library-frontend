@@ -1,4 +1,4 @@
-# Project Name
+# Pub Library
 
 Short description of your project.
 
@@ -18,12 +18,12 @@ A step-by-step series of examples that tell you how to get a development env run
 
 1. Install packages:
 
-   ```npm install``
+   ``` npm install ```
 
 2. Start local development:
 
-   ```npm run start``
+   ``` npm run start ```
 
 3. Build
 
-   ```npm run build``
+   ``` npm run build ```

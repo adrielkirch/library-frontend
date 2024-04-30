@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const customerHeaders = [
   { label: "#", key: "customer_id" },
@@ -19,6 +19,8 @@ const selectPageSizes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 export function useHomeViewModel() {
   const [currentHeader, setCurrentHeader] = useState([...customerHeaders]);
   const [selectedTable, setSelectedTable] = useState("Customers");
+  const [currentPageSize, setCurrentPageSize] = useState(selectPageSizes[0]);
+  const [startEndPage, setStartEndPage] = useState([1,5]);
 
   const [customers, setCustomers] = useState([
     {
@@ -50,6 +52,10 @@ export function useHomeViewModel() {
     }
   };
 
+  const handlePageSizeChange = (value) => {
+    setCurrentPageSize(value);
+  };
+
   return {
     customers,
     orders,
@@ -59,6 +65,9 @@ export function useHomeViewModel() {
     selectPageSizes,
     currentData,
     currentHeader,
+    currentPageSize,
+    startEndPage,
     handleDropdownChange,
+    handlePageSizeChange,
   };
 }
